@@ -6,6 +6,7 @@ export const colors = {
   green: '#338828',
   switchOn: '#34C759',
   muted: '#6B6B6B',
+  placeholder: '#595959',
   border: '#000000',
   line: '#E5E5E5',
   danger: '#C62828',

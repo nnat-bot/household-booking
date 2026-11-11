@@ -125,7 +125,7 @@ export default function ChatScreen({ navigation, route }: Props) {
           value={draft}
           onChangeText={setDraft}
           placeholder="Write a message"
-          placeholderTextColor={colors.muted}
+          placeholderTextColor={colors.placeholder}
           accessibilityLabel="Write a message"
         />
         <Pressable
