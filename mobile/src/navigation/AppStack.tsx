@@ -5,6 +5,7 @@ import CleanerListScreen from '../screens/customer/CleanerListScreen';
 import CleanerProfileScreen from '../screens/customer/CleanerProfileScreen';
 import CustomerTabs from './CustomerTabs';
 import DoneScreen from '../screens/customer/DoneScreen';
+import MyServicesScreen from '../screens/provider/MyServicesScreen';
 import PickTimeScreen from '../screens/customer/PickTimeScreen';
 import ProviderTabs from './ProviderTabs';
 import RequestDetailScreen from '../screens/provider/RequestDetailScreen';
@@ -65,6 +66,11 @@ export default function AppStack() {
         name="Review"
         component={ReviewScreen}
         options={{ title: 'Rate your cleaner' }}
+      />
+      <Stack.Screen
+        name="MyServices"
+        component={MyServicesScreen}
+        options={{ title: 'My services' }}
       />
       <Stack.Screen
         name="Chat"

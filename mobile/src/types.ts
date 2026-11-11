@@ -29,6 +29,14 @@ export type Service = {
   hourly_rate: string;
 };
 
+export type ProviderService = {
+  id: number;
+  category: string;
+  title: string;
+  description: string | null;
+  price_from: string;
+};
+
 export type Category = {
   category: string;
   cheapest: string;
@@ -58,7 +66,7 @@ export type CleanerProfile = {
   bio: string | null;
   hourly_rate: string;
   rating: string | null;
-  services: Omit<Service, 'provider_id' | 'provider_name' | 'avatar_url' | 'hourly_rate'>[];
+  services: ProviderService[];
   reviews: Review[];
 };
 

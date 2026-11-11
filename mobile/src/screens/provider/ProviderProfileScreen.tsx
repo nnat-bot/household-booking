@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StyleSheet, Text } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
@@ -6,8 +8,10 @@ import Screen from '../../components/Screen';
 import { updateMyProfile } from '../../api/providers';
 import { useAuth } from '../../state/AuthContext';
 import { colors, fontSize, spacing } from '../../theme';
+import type { RootStackParams } from '../../navigation/types';
 
 export default function ProviderProfileScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const { user, logout } = useAuth();
   const [name, setName] = useState(user?.name ?? '');
   const [bio, setBio] = useState(user?.bio ?? '');
@@ -57,6 +61,11 @@ export default function ProviderProfileScreen() {
       {saved ? <Text style={styles.saved}>{saved}</Text> : null}
 
       <Button title="Save changes" onPress={handleSave} busy={busy} />
+      <Button
+        title="My services"
+        variant="secondary"
+        onPress={() => navigation.navigate('MyServices')}
+      />
       <Button title="Log out" variant="danger" onPress={logout} />
     </Screen>
   );

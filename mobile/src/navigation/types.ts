@@ -30,4 +30,5 @@ export type RootStackParams = {
   RequestDetail: { bookingId: number };
   Review: { bookingId: number; cleanerName: string };
   Chat: { bookingId: number; title: string };
+  MyServices: undefined;
 };

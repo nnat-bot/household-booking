@@ -1,5 +1,5 @@
 import { request } from './client';
-import type { Cleaner, CleanerProfile, Slot, WorkingHours } from '../types';
+import type { Cleaner, CleanerProfile, ProviderService, Slot, WorkingHours } from '../types';
 
 export async function getCleaners(): Promise<Cleaner[]> {
   const response = await request('/providers', {}, 'loading the cleaners');
@@ -43,4 +43,39 @@ export async function saveMyWorkingHours(
     'saving your working hours',
   );
   return response.json();
+}
+
+export async function getMyServices(): Promise<ProviderService[]> {
+  const response = await request('/providers/me/services', {}, 'loading your services');
+  return response.json();
+}
+
+export async function addMyService(service: {
+  category: string;
+  title: string;
+  description: string;
+  priceFrom: string;
+}): Promise<ProviderService> {
+  const response = await request(
+    '/providers/me/services',
+    { method: 'POST', body: JSON.stringify(service) },
+    'adding the service',
+  );
+  return response.json();
+}
+
+export async function updateMyService(
+  id: number,
+  service: { category: string; title: string; description: string; priceFrom: string },
+): Promise<ProviderService> {
+  const response = await request(
+    `/providers/me/services/${id}`,
+    { method: 'PUT', body: JSON.stringify(service) },
+    'saving the service',
+  );
+  return response.json();
+}
+
+export async function deleteMyService(id: number): Promise<void> {
+  await request(`/providers/me/services/${id}`, { method: 'DELETE' }, 'deleting the service');
 }
