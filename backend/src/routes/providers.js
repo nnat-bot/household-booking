@@ -227,6 +227,8 @@ router.get('/:id/slots', async (req, res) => {
 
   try {
     const weekday = new Date(date).getDay();
+    const now = new Date();
+    const today = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 
     const workingHours = await pool.query(
       'select start_time, end_time from availability where provider_id = $1 and weekday = $2',
@@ -252,7 +254,9 @@ router.get('/:id/slots', async (req, res) => {
           booking => start < booking.end_time && end > booking.start_time,
         );
 
-        if (!taken) {
+        const past = date === today && hour <= now.getHours();
+
+        if (!taken && !past) {
           slots.push({ start_time: start.slice(0, 5), end_time: end.slice(0, 5) });
         }
         hour += SLOT_LENGTH;
