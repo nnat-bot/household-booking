@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
 import Screen from '../components/Screen';
 import { useAuth } from '../state/AuthContext';
@@ -6,6 +6,13 @@ import { colors, fontSize, spacing } from '../theme';
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    Alert.alert('Log out', 'Are you sure you want to log out?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Log out', style: 'destructive', onPress: logout },
+    ]);
+  };
 
   return (
     <Screen>
@@ -22,7 +29,7 @@ export default function ProfileScreen() {
       </Text>
 
       <View style={styles.buttons}>
-        <Button title="Log out" variant="danger" onPress={logout} />
+        <Button title="Log out" variant="danger" onPress={handleLogout} />
       </View>
     </Screen>
   );

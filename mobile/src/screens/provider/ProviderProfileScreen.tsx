@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { StyleSheet, Text } from 'react-native';
+import { Alert, StyleSheet, Text } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Screen from '../../components/Screen';
@@ -16,13 +16,15 @@ export default function ProviderProfileScreen() {
   const [name, setName] = useState(user?.name ?? '');
   const [bio, setBio] = useState(user?.bio ?? '');
   const [hourlyRate, setHourlyRate] = useState(user?.hourly_rate ?? '');
+  const [nameError, setNameError] = useState('');
   const [error, setError] = useState('');
   const [saved, setSaved] = useState('');
   const [busy, setBusy] = useState(false);
 
   const handleSave = async () => {
-    if (!name) {
-      setError('Please fill in your name');
+    const missingName = name.trim() ? '' : 'Please fill in your name';
+    setNameError(missingName);
+    if (missingName) {
       return;
     }
 
@@ -39,9 +41,16 @@ export default function ProviderProfileScreen() {
     }
   };
 
+  const handleLogout = () => {
+    Alert.alert('Log out', 'Are you sure you want to log out?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Log out', style: 'destructive', onPress: logout },
+    ]);
+  };
+
   return (
     <Screen>
-      <Input label="Full name" value={name} onChangeText={setName} />
+      <Input label="Full name" value={name} onChangeText={setName} error={nameError} />
       <Input
         label="About me"
         value={bio}
@@ -55,8 +64,9 @@ export default function ProviderProfileScreen() {
         onChangeText={setHourlyRate}
         placeholder="28"
         keyboardType="numeric"
-        error={error}
       />
+
+      {error ? <Text style={styles.error}>{error}</Text> : null}
 
       {saved ? <Text style={styles.saved}>{saved}</Text> : null}
 
@@ -66,12 +76,17 @@ export default function ProviderProfileScreen() {
         variant="secondary"
         onPress={() => navigation.navigate('MyServices')}
       />
-      <Button title="Log out" variant="danger" onPress={logout} />
+      <Button title="Log out" variant="danger" onPress={handleLogout} />
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  error: {
+    fontSize: fontSize.small,
+    color: colors.danger,
+    marginBottom: spacing.gap,
+  },
   saved: {
     fontSize: fontSize.small,
     color: colors.green,
