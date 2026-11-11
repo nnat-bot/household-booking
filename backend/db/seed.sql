@@ -3,9 +3,11 @@
 -- weekday: 0 = Sunday, 1 = Monday ... 6 = Saturday
 
 -- the two customer accounts
-insert into users (name, email, password_hash, role) values
-  ('Anna Virtanen', 'anna@example.com', '$2b$10$Ad5U58M6oRNBwUwjgu8Yv.LdIaExYEnbIgK3Dd82kq36FL6VpYgq2', 'customer'),
-  ('Mikko Laine', 'mikko@example.com', '$2b$10$Ad5U58M6oRNBwUwjgu8Yv.LdIaExYEnbIgK3Dd82kq36FL6VpYgq2', 'customer');
+insert into users (name, email, password_hash, role, avatar_url) values
+  ('Anna Virtanen', 'anna@example.com', '$2b$10$Ad5U58M6oRNBwUwjgu8Yv.LdIaExYEnbIgK3Dd82kq36FL6VpYgq2', 'customer',
+   'https://i.pravatar.cc/150?img=5'),
+  ('Mikko Laine', 'mikko@example.com', '$2b$10$Ad5U58M6oRNBwUwjgu8Yv.LdIaExYEnbIgK3Dd82kq36FL6VpYgq2', 'customer',
+   'https://i.pravatar.cc/150?img=8');
 
 -- the cleaner accounts
 insert into users (name, email, password_hash, role, avatar_url, bio, hourly_rate) values
