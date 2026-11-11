@@ -13,8 +13,8 @@ import type { Category, Service } from '../../types';
 
 const PRICES = [
   { label: 'Any price', value: '' },
-  { label: 'Under 25€', value: '25' },
-  { label: 'Under 30€', value: '30' },
+  { label: 'Up to 25€', value: '25' },
+  { label: 'Up to 30€', value: '30' },
 ];
 
 export default function BrowseScreen() {
