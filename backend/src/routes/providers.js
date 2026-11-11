@@ -93,6 +93,85 @@ router.put('/me', auth, async (req, res) => {
   }
 });
 
+router.get('/me/services', auth, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'select id, category, title, description, price_from from services where provider_id = $1 order by id',
+      [req.user.id],
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not load your services' });
+  }
+});
+
+router.post('/me/services', auth, async (req, res) => {
+  if (req.user.role !== 'provider') {
+    return res.status(403).json({ error: 'Only cleaners can do this' });
+  }
+
+  const { category, title, description, priceFrom } = req.body;
+  if (!category || !title || !priceFrom) {
+    return res.status(400).json({ error: 'Please fill in the type, title and price' });
+  }
+
+  try {
+    const result = await pool.query(
+      `insert into services (provider_id, category, title, description, price_from)
+       values ($1, $2, $3, $4, $5)
+       returning id, category, title, description, price_from`,
+      [req.user.id, category, title, description, priceFrom],
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not add the service' });
+  }
+});
+
+router.put('/me/services/:serviceId', auth, async (req, res) => {
+  const { category, title, description, priceFrom } = req.body;
+  if (!category || !title || !priceFrom) {
+    return res.status(400).json({ error: 'Please fill in the type, title and price' });
+  }
+
+  try {
+    const result = await pool.query(
+      `update services set category = $1, title = $2, description = $3, price_from = $4
+       where id = $5 and provider_id = $6
+       returning id, category, title, description, price_from`,
+      [category, title, description, priceFrom, req.params.serviceId, req.user.id],
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not save the service' });
+  }
+});
+
+router.delete('/me/services/:serviceId', auth, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'delete from services where id = $1 and provider_id = $2 returning id',
+      [req.params.serviceId, req.user.id],
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+    res.json({ id: result.rows[0].id });
+  } catch (err) {
+    if (err.code === '23503') {
+      return res.status(400).json({ error: 'This service has bookings and cannot be deleted' });
+    }
+    console.error(err);
+    res.status(500).json({ error: 'Could not delete the service' });
+  }
+});
+
 router.get('/:id', async (req, res) => {
   try {
     const user = await pool.query(

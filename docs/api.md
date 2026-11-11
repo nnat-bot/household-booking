@@ -30,6 +30,10 @@ returned by register and login and is valid for 7 days.
 | PUT | `/providers/me` | yes | The cleaner updates name, bio, hourly rate and photo | FR-10 |
 | GET | `/providers/me/availability` | yes | The working hours of the logged in cleaner | FR-11 |
 | PUT | `/providers/me/availability` | yes | Replaces the weekly working hours | FR-11 |
+| GET | `/providers/me/services` | yes | The services of the logged in cleaner | FR-10 |
+| POST | `/providers/me/services` | yes | The cleaner adds a new service | FR-10 |
+| PUT | `/providers/me/services/:id` | yes | The cleaner edits a service | FR-10 |
+| DELETE | `/providers/me/services/:id` | yes | The cleaner removes a service that has no bookings | FR-10 |
 
 ## Bookings
 
