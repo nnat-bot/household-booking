@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import Avatar from '../../components/Avatar';
 import Screen from '../../components/Screen';
 import { getCleaner } from '../../api/providers';
 import { formatPrice, formatRating } from '../../format';
@@ -38,11 +39,7 @@ export default function CleanerProfileScreen({ navigation, route }: Props) {
 
   return (
     <Screen loading={loading} error={error} onRetry={load}>
-      {cleaner.avatar_url ? (
-        <Image source={{ uri: cleaner.avatar_url }} style={styles.avatar} />
-      ) : (
-        <View style={styles.avatar} />
-      )}
+      <Avatar uri={cleaner.avatar_url} size={96} centered />
 
       <Text style={styles.name}>{cleaner.name}</Text>
       <Text style={styles.meta}>{formatRating(cleaner.rating)}</Text>
@@ -92,13 +89,6 @@ export default function CleanerProfileScreen({ navigation, route }: Props) {
 }
 
 const styles = StyleSheet.create({
-  avatar: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    backgroundColor: colors.tile,
-    alignSelf: 'center',
-  },
   name: {
     fontSize: fontSize.title,
     fontWeight: 'bold',

@@ -1,4 +1,5 @@
-import { Alert, Image, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
+import Avatar from '../components/Avatar';
 import Button from '../components/Button';
 import Screen from '../components/Screen';
 import { useAuth } from '../state/AuthContext';
@@ -16,11 +17,7 @@ export default function ProfileScreen() {
 
   return (
     <Screen>
-      {user?.avatar_url ? (
-        <Image source={{ uri: user.avatar_url }} style={styles.avatar} />
-      ) : (
-        <View style={styles.avatar} />
-      )}
+      <Avatar uri={user?.avatar_url} size={80} centered />
 
       <Text style={styles.name}>{user?.name}</Text>
       <Text style={styles.email}>{user?.email}</Text>
@@ -36,13 +33,6 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: colors.tile,
-    alignSelf: 'center',
-  },
   name: {
     fontSize: fontSize.title,
     fontWeight: 'bold',

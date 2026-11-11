@@ -1,4 +1,5 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Avatar from './Avatar';
 import { colors, fontSize, radius } from '../theme';
 import { formatPrice, formatRating } from '../format';
 import type { Cleaner } from '../types';
@@ -16,11 +17,7 @@ export default function CleanerCard({ cleaner, onPress }: Props) {
       accessibilityLabel={`Open the profile of ${cleaner.name}`}
       style={({ pressed }) => [styles.card, pressed && styles.pressed]}
     >
-      {cleaner.avatar_url ? (
-        <Image source={{ uri: cleaner.avatar_url }} style={styles.avatar} />
-      ) : (
-        <View style={styles.avatar} />
-      )}
+      <Avatar uri={cleaner.avatar_url} size={56} />
 
       <View style={styles.texts}>
         <Text style={styles.name}>{cleaner.name}</Text>
@@ -42,12 +39,6 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.7,
-  },
-  avatar: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: colors.tile,
   },
   texts: {
     flex: 1,

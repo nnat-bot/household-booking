@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Avatar from '../components/Avatar';
 import Screen from '../components/Screen';
 import { getBookings } from '../api/bookings';
 import { formatDate } from '../format';
@@ -49,11 +50,7 @@ export default function MessagesScreen() {
               accessibilityLabel={`Open the chat with ${who}`}
               style={({ pressed }) => [styles.row, pressed && styles.pressed]}
             >
-              {booking.avatar_url ? (
-                <Image source={{ uri: booking.avatar_url }} style={styles.avatar} />
-              ) : (
-                <View style={styles.avatar} />
-              )}
+              <Avatar uri={booking.avatar_url} size={48} />
 
               <View style={styles.texts}>
                 <Text style={styles.name}>{who}</Text>
@@ -80,12 +77,6 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.7,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.tile,
   },
   texts: {
     flex: 1,
