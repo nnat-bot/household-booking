@@ -43,7 +43,7 @@ export default function RequestsScreen() {
   const shown = bookings.filter(booking => FILTERS[filter].statuses.includes(booking.status));
 
   return (
-    <Screen loading={loading} error={error} onRetry={load}>
+    <Screen loading={loading} error={error} onRetry={load} onRefresh={load}>
       <View style={styles.tabs}>
         {FILTERS.map((item, index) => (
           <Chip

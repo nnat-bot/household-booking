@@ -41,7 +41,7 @@ export default function BookingsScreen() {
   );
 
   return (
-    <Screen loading={loading} error={error} onRetry={load}>
+    <Screen loading={loading} error={error} onRetry={load} onRefresh={load}>
       <View style={styles.tabs}>
         <Chip label="Upcoming" selected={upcoming} onPress={() => setUpcoming(true)} />
         <Chip label="Past" selected={!upcoming} onPress={() => setUpcoming(false)} />

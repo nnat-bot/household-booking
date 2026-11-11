@@ -34,7 +34,7 @@ export default function MessagesScreen() {
   );
 
   return (
-    <Screen loading={loading} error={error} onRetry={load}>
+    <Screen loading={loading} error={error} onRetry={load} onRefresh={load}>
       {bookings.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyText}>You have no chats yet.</Text>
