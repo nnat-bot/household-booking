@@ -97,13 +97,13 @@ export default function ScheduleScreen() {
                 value={day.startHour}
                 onChange={startHour => updateDay(index, { startHour })}
                 min={0}
-                max={22}
+                max={day.endHour - 1}
               />
               <Stepper
                 label="To"
                 value={day.endHour}
                 onChange={endHour => updateDay(index, { endHour })}
-                min={1}
+                min={day.startHour + 1}
                 max={23}
               />
             </View>
