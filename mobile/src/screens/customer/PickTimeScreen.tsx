@@ -11,6 +11,7 @@ import type { Slot } from '../../types';
 
 const DAYS_AHEAD = 14;
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 type Props = NativeStackScreenProps<RootStackParams, 'PickTime'>;
 
@@ -69,18 +70,22 @@ export default function PickTimeScreen({ navigation, route }: Props) {
     <Screen error={error} onRetry={load}>
       <Text style={styles.section}>Choose a day</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.strip}>
-        {days.map(day => {
+        {days.map((day, index) => {
           const value = toDateString(day);
           const selected = value === date;
+          const newMonth = index === 0 || day.getMonth() !== days[index - 1].getMonth();
           return (
             <Pressable
               key={value}
               onPress={() => setDate(value)}
               accessibilityRole="button"
               accessibilityState={{ selected }}
-              accessibilityLabel={`${WEEKDAYS[day.getDay()]} ${day.getDate()}`}
+              accessibilityLabel={`${WEEKDAYS[day.getDay()]} ${day.getDate()} ${MONTHS[day.getMonth()]}`}
               style={({ pressed }) => [styles.day, selected && styles.daySelected, pressed && styles.pressed]}
             >
+              <Text style={[styles.dayMonth, selected && styles.onDark]}>
+                {newMonth ? MONTHS[day.getMonth()] : ''}
+              </Text>
               <Text style={[styles.dayName, selected && styles.onDark]}>{WEEKDAYS[day.getDay()]}</Text>
               <Text style={[styles.dayNumber, selected && styles.onDark]}>{day.getDate()}</Text>
             </Pressable>
@@ -143,6 +148,12 @@ const styles = StyleSheet.create({
   },
   daySelected: {
     backgroundColor: colors.text,
+  },
+  dayMonth: {
+    height: 14,
+    fontSize: fontSize.tiny,
+    fontWeight: 'bold',
+    color: colors.text,
   },
   dayName: {
     fontSize: fontSize.tiny,
