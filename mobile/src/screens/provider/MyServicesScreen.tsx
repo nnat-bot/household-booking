@@ -31,6 +31,8 @@ export default function MyServicesScreen() {
   const [priceFrom, setPriceFrom] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [titleError, setTitleError] = useState('');
+  const [priceError, setPriceError] = useState('');
   const [formError, setFormError] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -55,6 +57,8 @@ export default function MyServicesScreen() {
     setTitle('');
     setDescription('');
     setPriceFrom('');
+    setTitleError('');
+    setPriceError('');
     setFormError('');
   };
 
@@ -64,12 +68,17 @@ export default function MyServicesScreen() {
     setTitle(service.title);
     setDescription(service.description ?? '');
     setPriceFrom(service.price_from);
+    setTitleError('');
+    setPriceError('');
     setFormError('');
   };
 
   const handleSave = async () => {
-    if (!title.trim() || !priceFrom.trim()) {
-      setFormError('Please fill in the title and the price');
+    const missingTitle = title.trim() ? '' : 'Please fill in the title';
+    const missingPrice = priceFrom.trim() ? '' : 'Please fill in the price';
+    setTitleError(missingTitle);
+    setPriceError(missingPrice);
+    if (missingTitle || missingPrice) {
       return;
     }
 
@@ -159,7 +168,13 @@ export default function MyServicesScreen() {
           ))}
         </ScrollView>
 
-        <Input label="Title" value={title} onChangeText={setTitle} placeholder="Deep cleaning" />
+        <Input
+          label="Title"
+          value={title}
+          onChangeText={setTitle}
+          placeholder="Deep cleaning"
+          error={titleError}
+        />
         <Input
           label="Short description"
           value={description}
@@ -173,8 +188,10 @@ export default function MyServicesScreen() {
           onChangeText={setPriceFrom}
           placeholder="28"
           keyboardType="numeric"
-          error={formError}
+          error={priceError}
         />
+
+        {formError ? <Text style={styles.formError}>{formError}</Text> : null}
 
         <Button title={editing ? 'Save service' : 'Add service'} onPress={handleSave} busy={busy} />
         {editing ? <Button title="Cancel" variant="secondary" onPress={clearForm} /> : null}
@@ -210,6 +227,11 @@ const styles = StyleSheet.create({
     height: TOUCH_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  formError: {
+    fontSize: fontSize.small,
+    color: colors.danger,
+    marginBottom: spacing.gap,
   },
   label: {
     fontSize: fontSize.small,
