@@ -12,6 +12,7 @@ const header = {
 
 export const screenOptions: NativeStackNavigationOptions = {
   ...header,
+  headerBackButtonDisplayMode: 'minimal',
   contentStyle: { backgroundColor: colors.background },
 };
 
