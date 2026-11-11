@@ -42,7 +42,7 @@ export default function SummaryScreen({ navigation, route }: Props) {
           { label: 'Service', value: serviceTitle },
           { label: 'Date', value: formatDate(date) },
           { label: 'Time', value: `${formatTime(startTime)} - ${formatTime(endTime)}` },
-          { label: 'Estimated Times', value: `${hours}hrs` },
+          { label: 'Estimated time', value: `${hours}hrs` },
         ]}
         totalLabel="Total"
         totalValue={`${total}€`}
