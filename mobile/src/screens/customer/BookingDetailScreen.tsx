@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useState } from 'react';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import Avatar from '../../components/Avatar';
 import Button from '../../components/Button';
 import Screen from '../../components/Screen';
 import StatusChip from '../../components/StatusChip';
@@ -12,6 +15,7 @@ import type { RootStackParams } from '../../navigation/types';
 import type { BookingDetail } from '../../types';
 
 const CAN_CANCEL = ['pending', 'confirmed'];
+const STARS = [1, 2, 3, 4, 5];
 
 type Props = NativeStackScreenProps<RootStackParams, 'BookingDetail'>;
 
@@ -23,7 +27,6 @@ export default function BookingDetailScreen({ navigation, route }: Props) {
   const [busy, setBusy] = useState(false);
 
   const load = useCallback(async () => {
-    setLoading(true);
     setError('');
     try {
       setBooking(await getBooking(bookingId));
@@ -34,9 +37,11 @@ export default function BookingDetailScreen({ navigation, route }: Props) {
     }
   }, [bookingId]);
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, [load]),
+  );
 
   const handleCancel = () => {
     Alert.alert(
@@ -73,7 +78,16 @@ export default function BookingDetailScreen({ navigation, route }: Props) {
 
   return (
     <Screen loading={loading} error={error} onRetry={load}>
-      <Text style={styles.name}>{booking.provider_name}</Text>
+      <Pressable
+        onPress={() => navigation.navigate('CleanerProfile', { cleanerId: booking.provider_id })}
+        accessibilityRole="button"
+        accessibilityLabel={`Open the profile of ${booking.provider_name}`}
+        style={({ pressed }) => [styles.nameRow, pressed && styles.pressed]}
+      >
+        <Avatar uri={booking.avatar_url} size={40} />
+        <Text style={styles.name}>{booking.provider_name}</Text>
+      </Pressable>
+
       <View style={styles.chip}>
         <StatusChip status={booking.status} />
       </View>
@@ -103,7 +117,24 @@ export default function BookingDetailScreen({ navigation, route }: Props) {
         <Button title="Cancel booking" variant="danger" onPress={handleCancel} busy={busy} />
       ) : null}
 
-      {booking.status === 'completed' ? (
+      {booking.review_rating ? (
+        <View style={styles.review}>
+          <Text style={styles.reviewTitle}>Your review</Text>
+          <View style={styles.stars}>
+            {STARS.map(star => (
+              <MaterialIcons
+                key={star}
+                name={star <= Number(booking.review_rating) ? 'star' : 'star-border'}
+                size={22}
+                color={colors.text}
+              />
+            ))}
+          </View>
+          {booking.review_comment ? (
+            <Text style={styles.reviewComment}>{booking.review_comment}</Text>
+          ) : null}
+        </View>
+      ) : booking.status === 'completed' ? (
         <Button
           title="Write a review"
           variant="secondary"
@@ -120,10 +151,36 @@ export default function BookingDetailScreen({ navigation, route }: Props) {
 }
 
 const styles = StyleSheet.create({
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  pressed: {
+    opacity: 0.7,
+  },
   name: {
+    flex: 1,
+    marginLeft: 12,
     fontSize: fontSize.title,
     fontWeight: 'bold',
     color: colors.text,
+  },
+  review: {
+    marginTop: spacing.gap,
+  },
+  reviewTitle: {
+    fontSize: fontSize.section,
+    fontWeight: 'bold',
+    color: colors.text,
+    marginBottom: 8,
+  },
+  stars: {
+    flexDirection: 'row',
+  },
+  reviewComment: {
+    fontSize: fontSize.label,
+    color: colors.text,
+    marginTop: 8,
   },
   chip: {
     marginTop: spacing.gap,

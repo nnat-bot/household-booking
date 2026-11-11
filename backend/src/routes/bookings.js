@@ -121,11 +121,13 @@ router.get('/:id', auth, async (req, res) => {
               b.start_time, b.end_time, b.estimated_price,
               s.title as service_title, s.category,
               c.name as customer_name,
-              p.name as provider_name, p.avatar_url
+              p.name as provider_name, p.avatar_url,
+              r.rating as review_rating, r.comment as review_comment
        from bookings b
        join services s on s.id = b.service_id
        join users c on c.id = b.customer_id
        join users p on p.id = b.provider_id
+       left join reviews r on r.booking_id = b.id
        where b.id = $1`,
       [req.params.id],
     );

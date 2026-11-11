@@ -101,6 +101,8 @@ export type BookingDetail = Booking & {
   provider_id: number;
   customer_name: string;
   provider_name: string;
+  review_rating: number | null;
+  review_comment: string | null;
 };
 
 export type Message = {
