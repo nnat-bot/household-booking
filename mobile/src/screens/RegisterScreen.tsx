@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import SelectTile from '../components/SelectTile';
@@ -48,52 +55,61 @@ export default function RegisterScreen() {
   };
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Input
-        label="Full name"
-        value={name}
-        onChangeText={setName}
-        placeholder="Anna Virtanen"
-        error={nameError}
-      />
-      <Input
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        placeholder="you@example.com"
-        keyboardType="email-address"
-        error={emailError}
-      />
-      <Input
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        placeholder="At least 6 characters"
-        secure
-        error={passwordError}
-      />
-
-      <Text style={styles.label}>I want to</Text>
-      <View style={styles.roles}>
-        <SelectTile
-          label="Book a cleaner"
-          icon="search"
-          selected={role === 'customer'}
-          onPress={() => setRole('customer')}
+    <KeyboardAvoidingView
+      style={styles.screen}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <ScrollView
+        style={styles.screen}
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Input
+          label="Full name"
+          value={name}
+          onChangeText={setName}
+          placeholder="Anna Virtanen"
+          error={nameError}
         />
-        <View style={styles.space} />
-        <SelectTile
-          label="Work as a cleaner"
-          icon="work-outline"
-          selected={role === 'provider'}
-          onPress={() => setRole('provider')}
+        <Input
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          placeholder="you@example.com"
+          keyboardType="email-address"
+          error={emailError}
         />
-      </View>
+        <Input
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          placeholder="At least 6 characters"
+          secure
+          error={passwordError}
+        />
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+        <Text style={styles.label}>I want to</Text>
+        <View style={styles.roles}>
+          <SelectTile
+            label="Book a cleaner"
+            icon="search"
+            selected={role === 'customer'}
+            onPress={() => setRole('customer')}
+          />
+          <View style={styles.space} />
+          <SelectTile
+            label="Work as a cleaner"
+            icon="work-outline"
+            selected={role === 'provider'}
+            onPress={() => setRole('provider')}
+          />
+        </View>
 
-      <Button title="Create account" onPress={handleRegister} busy={busy} />
-    </ScrollView>
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+
+        <Button title="Create account" onPress={handleRegister} busy={busy} />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
