@@ -22,7 +22,8 @@ export function formatTime(value: string): string {
 }
 
 export function formatPrice(value: string): string {
-  return `${Math.round(Number(value))}€`;
+  const price = Number(value);
+  return Number.isInteger(price) ? `${price}€` : `${price.toFixed(2)}€`;
 }
 
 export function formatRating(rating: string | null, count?: string): string {
