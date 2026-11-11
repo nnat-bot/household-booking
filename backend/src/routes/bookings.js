@@ -97,7 +97,7 @@ router.get('/', auth, async (req, res) => {
         `select b.id, b.status, to_char(b.booking_date, 'YYYY-MM-DD') as booking_date,
                 b.start_time, b.end_time, b.estimated_price,
                 s.title as service_title, s.category,
-                c.name as customer_name
+                c.name as customer_name, c.avatar_url
          from bookings b
          join services s on s.id = b.service_id
          join users c on c.id = b.customer_id
