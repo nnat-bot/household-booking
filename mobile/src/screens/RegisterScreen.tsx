@@ -13,16 +13,26 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<Role>('customer');
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
   const handleRegister = async () => {
-    if (!name || !email || !password) {
-      setError('Please fill in all the fields');
-      return;
+    const missingName = name.trim() ? '' : 'Please fill in your name';
+    const missingEmail = email.trim() ? '' : 'Please fill in your email';
+    let passwordProblem = '';
+    if (!password) {
+      passwordProblem = 'Please fill in a password';
+    } else if (password.length < 6) {
+      passwordProblem = 'The password needs at least 6 characters';
     }
-    if (password.length < 6) {
-      setError('The password needs at least 6 characters');
+
+    setNameError(missingName);
+    setEmailError(missingEmail);
+    setPasswordError(passwordProblem);
+    if (missingName || missingEmail || passwordProblem) {
       return;
     }
 
@@ -39,13 +49,20 @@ export default function RegisterScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Input label="Full name" value={name} onChangeText={setName} placeholder="Anna Virtanen" />
+      <Input
+        label="Full name"
+        value={name}
+        onChangeText={setName}
+        placeholder="Anna Virtanen"
+        error={nameError}
+      />
       <Input
         label="Email"
         value={email}
         onChangeText={setEmail}
         placeholder="you@example.com"
         keyboardType="email-address"
+        error={emailError}
       />
       <Input
         label="Password"
@@ -53,6 +70,7 @@ export default function RegisterScreen() {
         onChangeText={setPassword}
         placeholder="At least 6 characters"
         secure
+        error={passwordError}
       />
 
       <Text style={styles.label}>I want to</Text>

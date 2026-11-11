@@ -13,12 +13,17 @@ export default function LoginScreen({ navigation }: Props) {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      setError('Please fill in email and password');
+    const missingEmail = email.trim() ? '' : 'Please fill in your email';
+    const missingPassword = password ? '' : 'Please fill in your password';
+    setEmailError(missingEmail);
+    setPasswordError(missingPassword);
+    if (missingEmail || missingPassword) {
       return;
     }
 
@@ -44,6 +49,7 @@ export default function LoginScreen({ navigation }: Props) {
         onChangeText={setEmail}
         placeholder="you@example.com"
         keyboardType="email-address"
+        error={emailError}
       />
       <Input
         label="Password"
@@ -51,8 +57,10 @@ export default function LoginScreen({ navigation }: Props) {
         onChangeText={setPassword}
         placeholder="Your password"
         secure
-        error={error}
+        error={passwordError}
       />
+
+      {error ? <Text style={styles.error}>{error}</Text> : null}
 
       <Button title="Log in" onPress={handleLogin} busy={busy} />
 
@@ -68,6 +76,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
     padding: spacing.screen,
+  },
+  error: {
+    fontSize: fontSize.small,
+    color: colors.danger,
+    marginBottom: spacing.gap,
   },
   link: {
     fontSize: fontSize.label,
