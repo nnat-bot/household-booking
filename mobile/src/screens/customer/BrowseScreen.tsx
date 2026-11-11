@@ -6,6 +6,7 @@ import Chip from '../../components/Chip';
 import Screen from '../../components/Screen';
 import ServiceCard from '../../components/ServiceCard';
 import { getCategories, getServices } from '../../api/services';
+import { formatCategory } from '../../format';
 import { colors, fontSize, spacing } from '../../theme';
 import type { RootStackParams } from '../../navigation/types';
 import type { Category, Service } from '../../types';
@@ -53,7 +54,7 @@ export default function BrowseScreen() {
         {categories.map(group => (
           <Chip
             key={group.category}
-            label={group.category}
+            label={formatCategory(group.category)}
             selected={category === group.category}
             onPress={() => setCategory(group.category)}
           />

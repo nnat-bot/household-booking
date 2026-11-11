@@ -1,3 +1,14 @@
+const CATEGORY_LABELS: Record<string, string> = {
+  standard: 'Standard',
+  deep: 'Deep',
+  window: 'Windows',
+  moveout: 'Move-out',
+};
+
+export function formatCategory(value: string): string {
+  return CATEGORY_LABELS[value] ?? value;
+}
+
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
