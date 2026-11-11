@@ -48,7 +48,12 @@ export default function RegisterScreen() {
     try {
       await register(name.trim(), email.trim(), password, role);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not create the account');
+      const message = err instanceof Error ? err.message : 'Could not create the account';
+      if (message.includes('already registered')) {
+        setEmailError(message);
+      } else {
+        setError(message);
+      }
     } finally {
       setBusy(false);
     }
