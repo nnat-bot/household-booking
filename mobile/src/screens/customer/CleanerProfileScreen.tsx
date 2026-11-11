@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Screen from '../../components/Screen';
 import { getCleaner } from '../../api/providers';
-import { formatRating } from '../../format';
+import { formatPrice, formatRating } from '../../format';
 import { colors, fontSize, radius, spacing } from '../../theme';
 import type { RootStackParams } from '../../navigation/types';
 import type { CleanerProfile } from '../../types';
@@ -46,7 +46,7 @@ export default function CleanerProfileScreen({ navigation, route }: Props) {
 
       <Text style={styles.name}>{cleaner.name}</Text>
       <Text style={styles.meta}>{formatRating(cleaner.rating)}</Text>
-      <Text style={styles.meta}>{cleaner.hourly_rate}€ / hour</Text>
+      <Text style={styles.meta}>{formatPrice(cleaner.hourly_rate)} / hour</Text>
       {cleaner.bio ? <Text style={styles.bio}>{cleaner.bio}</Text> : null}
 
       <Text style={styles.section}>Services</Text>
@@ -68,7 +68,7 @@ export default function CleanerProfileScreen({ navigation, route }: Props) {
         >
           <View style={styles.serviceText}>
             <Text style={styles.serviceTitle}>{service.title}</Text>
-            <Text style={styles.serviceDetail}>from {service.price_from}€ / hour</Text>
+            <Text style={styles.serviceDetail}>from {formatPrice(service.price_from)} / hour</Text>
           </View>
           <Text style={styles.book}>Book</Text>
         </Pressable>

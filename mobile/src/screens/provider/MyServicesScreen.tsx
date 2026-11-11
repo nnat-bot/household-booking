@@ -12,6 +12,7 @@ import {
   getMyServices,
   updateMyService,
 } from '../../api/providers';
+import { formatPrice } from '../../format';
 import { colors, fontSize, radius, spacing, TOUCH_SIZE } from '../../theme';
 import type { ProviderService } from '../../types';
 
@@ -21,6 +22,11 @@ const CATEGORIES = [
   { value: 'window', label: 'Windows' },
   { value: 'moveout', label: 'Move-out' },
 ];
+
+function categoryLabel(value: string): string {
+  const found = CATEGORIES.find(item => item.value === value);
+  return found ? found.label : value;
+}
 
 export default function MyServicesScreen() {
   const [services, setServices] = useState<ProviderService[]>([]);
@@ -140,7 +146,7 @@ export default function MyServicesScreen() {
           >
             <Text style={styles.rowTitle}>{service.title}</Text>
             <Text style={styles.rowDetail}>
-              {service.category} · from {service.price_from}€ / hour
+              {categoryLabel(service.category)} · from {formatPrice(service.price_from)} / hour
             </Text>
           </Pressable>
 

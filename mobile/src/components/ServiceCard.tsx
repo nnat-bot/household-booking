@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, fontSize, radius } from '../theme';
+import { formatPrice } from '../format';
 import type { Service } from '../types';
 
 type Props = {
@@ -24,7 +25,7 @@ export default function ServiceCard({ service, onPress }: Props) {
 
       <View style={styles.footer}>
         <Text style={styles.detail}>{service.provider_name}</Text>
-        <Text style={styles.price}>from {service.price_from}€ / hour</Text>
+        <Text style={styles.price}>from {formatPrice(service.price_from)} / hour</Text>
       </View>
     </Pressable>
   );

@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, fontSize, radius } from '../theme';
-import { formatRating } from '../format';
+import { formatPrice, formatRating } from '../format';
 import type { Cleaner } from '../types';
 
 type Props = {
@@ -25,7 +25,7 @@ export default function CleanerCard({ cleaner, onPress }: Props) {
       <View style={styles.texts}>
         <Text style={styles.name}>{cleaner.name}</Text>
         <Text style={styles.detail}>{formatRating(cleaner.rating, cleaner.review_count)}</Text>
-        <Text style={styles.detail}>{cleaner.hourly_rate}€ / hour</Text>
+        <Text style={styles.detail}>{formatPrice(cleaner.hourly_rate)} / hour</Text>
       </View>
     </Pressable>
   );
