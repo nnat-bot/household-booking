@@ -12,23 +12,26 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import Avatar from '../components/Avatar';
+import { getBooking } from '../api/bookings';
 import { getMessages, sendMessage } from '../api/messages';
 import { useAuth } from '../state/AuthContext';
 import { colors, fontSize, radius, spacing, TOUCH_SIZE } from '../theme';
-import type { Message } from '../types';
+import type { RootStackParams } from '../navigation/types';
+import type { BookingDetail, Message } from '../types';
 
 const POLL_MS = 5000;
 
-type Props = {
-  route: { params: { bookingId: number; title: string } };
-};
+type Props = NativeStackScreenProps<RootStackParams, 'Chat'>;
 
-export default function ChatScreen({ route }: Props) {
+export default function ChatScreen({ navigation, route }: Props) {
   const { bookingId } = route.params;
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const listRef = useRef<ComponentRef<typeof ScrollView>>(null);
 
+  const [booking, setBooking] = useState<BookingDetail | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [draft, setDraft] = useState('');
   const [error, setError] = useState('');
@@ -48,6 +51,32 @@ export default function ChatScreen({ route }: Props) {
     const timer = setInterval(load, POLL_MS);
     return () => clearInterval(timer);
   }, [load]);
+
+  useEffect(() => {
+    getBooking(bookingId)
+      .then(setBooking)
+      .catch(() => undefined);
+  }, [bookingId]);
+
+  useEffect(() => {
+    if (!booking || user?.role !== 'customer') {
+      return;
+    }
+
+    navigation.setOptions({
+      headerTitle: () => (
+        <Pressable
+          onPress={() => navigation.navigate('CleanerProfile', { cleanerId: booking.provider_id })}
+          accessibilityRole="button"
+          accessibilityLabel={`Open the profile of ${booking.provider_name}`}
+          style={({ pressed }) => [styles.headerTitle, pressed && styles.pressed]}
+        >
+          <Avatar uri={booking.avatar_url} size={28} />
+          <Text style={styles.headerName}>{booking.provider_name}</Text>
+        </Pressable>
+      ),
+    });
+  }, [booking, navigation, user]);
 
   const handleSend = async () => {
     const body = draft.trim();
@@ -114,6 +143,16 @@ export default function ChatScreen({ route }: Props) {
 }
 
 const styles = StyleSheet.create({
+  headerTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerName: {
+    marginLeft: 8,
+    fontSize: fontSize.title,
+    fontWeight: 'bold',
+    color: colors.text,
+  },
   screen: {
     flex: 1,
     backgroundColor: colors.background,
