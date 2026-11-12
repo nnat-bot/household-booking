@@ -27,8 +27,10 @@ router.post('/register', async (req, res) => {
     return res.status(400).json({ error: 'Role must be customer or provider' });
   }
 
+  const address = email.trim().toLowerCase();
+
   try {
-    const found = await pool.query('select id from users where email = $1', [email]);
+    const found = await pool.query('select id from users where email = $1', [address]);
     if (found.rows.length > 0) {
       return res.status(400).json({ error: 'This email is already registered' });
     }
@@ -38,7 +40,7 @@ router.post('/register', async (req, res) => {
       `insert into users (name, email, password_hash, role)
        values ($1, $2, $3, $4)
        returning id, name, email, role`,
-      [name, email, hash, role],
+      [name, address, hash, role],
     );
 
     const user = result.rows[0];
@@ -56,8 +58,10 @@ router.post('/login', async (req, res) => {
     return res.status(400).json({ error: 'Please fill in email and password' });
   }
 
+  const address = email.trim().toLowerCase();
+
   try {
-    const result = await pool.query('select * from users where email = $1', [email]);
+    const result = await pool.query('select * from users where email = $1', [address]);
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Wrong email or password' });
     }
