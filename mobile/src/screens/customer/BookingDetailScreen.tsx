@@ -46,7 +46,7 @@ export default function BookingDetailScreen({ navigation, route }: Props) {
   const handleCancel = () => {
     Alert.alert(
       'Cancel this booking?',
-      'The cleaner will be notified. This cannot be undone.',
+      'The cleaner will see this in the app. This cannot be undone.',
       [
         { text: 'Keep it', style: 'cancel' },
         {
