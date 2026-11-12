@@ -88,7 +88,7 @@ router.get('/', auth, async (req, res) => {
          join services s on s.id = b.service_id
          join users p on p.id = b.provider_id
          where b.customer_id = $1
-         order by b.booking_date desc`,
+         order by b.booking_date desc, b.start_time desc, b.id desc`,
         [req.user.id],
       );
       res.json(result.rows);
@@ -102,7 +102,7 @@ router.get('/', auth, async (req, res) => {
          join services s on s.id = b.service_id
          join users c on c.id = b.customer_id
          where b.provider_id = $1
-         order by b.booking_date desc`,
+         order by b.booking_date desc, b.start_time desc, b.id desc`,
         [req.user.id],
       );
       res.json(result.rows);
