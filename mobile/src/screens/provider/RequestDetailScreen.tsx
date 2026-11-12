@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Button from '../../components/Button';
 import Screen from '../../components/Screen';
@@ -54,6 +54,27 @@ export default function RequestDetailScreen({ navigation, route }: Props) {
     }
   };
 
+  const confirmDecline = () => {
+    Alert.alert('Decline this request?', 'The customer will see that you declined it.', [
+      { text: 'Keep it', style: 'cancel' },
+      {
+        text: 'Decline',
+        style: 'destructive',
+        onPress: () => runAction(declineBooking, 'Could not decline the request'),
+      },
+    ]);
+  };
+
+  const confirmComplete = () => {
+    Alert.alert('Mark this booking as completed?', 'The customer can then leave a review.', [
+      { text: 'Not yet', style: 'cancel' },
+      {
+        text: 'Mark as completed',
+        onPress: () => runAction(completeBooking, 'Could not finish the booking'),
+      },
+    ]);
+  };
+
   if (!booking) {
     return (
       <Screen loading={loading} error={error} onRetry={load}>
@@ -91,21 +112,12 @@ export default function RequestDetailScreen({ navigation, route }: Props) {
             busy={busy}
             onPress={() => runAction(acceptBooking, 'Could not accept the request')}
           />
-          <Button
-            title="Decline"
-            variant="secondary"
-            busy={busy}
-            onPress={() => runAction(declineBooking, 'Could not decline the request')}
-          />
+          <Button title="Decline" variant="secondary" busy={busy} onPress={confirmDecline} />
         </>
       ) : null}
 
       {booking.status === 'confirmed' ? (
-        <Button
-          title="Mark as completed"
-          busy={busy}
-          onPress={() => runAction(completeBooking, 'Could not finish the booking')}
-        />
+        <Button title="Mark as completed" busy={busy} onPress={confirmComplete} />
       ) : null}
 
       <Button
