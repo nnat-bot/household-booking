@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Avatar from '../components/Avatar';
 import { getBooking } from '../api/bookings';
@@ -46,11 +47,13 @@ export default function ChatScreen({ navigation, route }: Props) {
     }
   }, [bookingId]);
 
-  useEffect(() => {
-    load();
-    const timer = setInterval(load, POLL_MS);
-    return () => clearInterval(timer);
-  }, [load]);
+  useFocusEffect(
+    useCallback(() => {
+      load();
+      const timer = setInterval(load, POLL_MS);
+      return () => clearInterval(timer);
+    }, [load]),
+  );
 
   useEffect(() => {
     getBooking(bookingId)
