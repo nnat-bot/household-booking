@@ -27,7 +27,6 @@ export default function BrowseScreen() {
   const [error, setError] = useState('');
 
   const load = useCallback(async (selected: string, price: string) => {
-    setLoading(true);
     setError('');
     try {
       const [list, groups] = await Promise.all([
